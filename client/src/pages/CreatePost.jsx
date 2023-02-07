@@ -19,7 +19,7 @@ const CreatePost = () => {
   const [loading, setLoading] = useState(false);
 
   const generateImg = () => {
-
+    
   }
   
   const handleSubmit = () => {
@@ -32,7 +32,6 @@ const CreatePost = () => {
 
   const handleSurpriseMe = () => {
     const randomPrompt = getRandomPrompt(form.prompt);
-    console.log(randomPrompt)
     setForm({...form, prompt:randomPrompt});
   }
 
