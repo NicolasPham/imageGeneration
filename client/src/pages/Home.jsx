@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 //components
 import Card from '../components/Card';
@@ -19,7 +20,37 @@ const Home = () => {
   /*<======================>*/
   const [loading, setLoading] = useState(false);
   const [allPosts, setAllPosts] = useState(null);
-  const [searchText, setSearchText] = useState("something");
+  const [searchText, setSearchText] = useState("");
+  const [searchResult, setSearchResult] = useState(null);
+  const [searchTimeOut, setSearchTimeOut] = useState(null);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get('http://localhost:5000/api/v1/post');
+        setAllPosts(response.data.data.reverse());
+      } catch (error) {
+        alert(error)
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchPosts(); 
+  }, [])
+
+  const handleSearchChange = (e) => {
+    clearTimeout(searchTimeOut);
+    setSearchText(e.target.value);
+
+    setSearchTimeOut(
+      setTimeout(() => {
+        const result = allPosts.filter((item) => item.prompt.toLowerCase().includes(searchText.toLowerCase()) || item.name.toLowerCase().includes(searchText.toLowerCase()));
+        setSearchResult(result);
+      }, 500)
+      )
+  }
 
   return (
     <section className='max-w-7xl mx-auto'>
@@ -29,7 +60,14 @@ const Home = () => {
       </div>
 
       <div className="mt-16">
-        <FormField />
+        <FormField
+        labelName="Search posts" 
+        type="text"
+        name="text"
+        placeholder="Search posts"
+        value={searchText}
+        handleChange={handleSearchChange}
+        />
       </div>
 
       <div className='mt-10'>
@@ -46,12 +84,12 @@ const Home = () => {
            <div className='grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3'>
             {searchText ? (
               <RenderCard 
-                data = {[]}
+                data = {searchResult}
                 title = "No search results found"
               />
             ) : (
               <RenderCard 
-                data = {[]}
+                data = {allPosts}
                 title ="No posts found"
               />
             )}

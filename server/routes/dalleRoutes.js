@@ -24,12 +24,10 @@ router.post("/", async (req, res) => {
       prompt,
       n: 1,
       size: "1024x1024",
-      response_format: "b64_json",
     });
 
-    const image = aiResponse.data.data[0].b64_json;
-    // res.status(200).send(image);
-    res.status(200).json({ photo: image });
+    const image = aiResponse.data.data[0]['url'];
+    res.status(200).send(image);
   } catch (error) {
     console.log(error);
     res.status(500).send(error?.response.data.error.message);

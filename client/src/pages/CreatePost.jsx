@@ -24,11 +24,11 @@ const CreatePost = () => {
         setGeneratingImg(true);
 
         const response = await axios.post(
-          "https://e8bz4r-5000.preview.csb.app/api/v1/dalle/",
+          "http://localhost:5000/api/v1/dalle/",
           { prompt: form.prompt }
         );
         const data = response.data;
-        setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+        setForm({ ...form, photo: data});
       } catch (error) {
         alert(error);
       } finally {
@@ -39,7 +39,22 @@ const CreatePost = () => {
     }
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (form.prompt && form.photo) {
+      setLoading(true);
+      try {
+        const response = await axios.post("http://localhost:5000/api/v1/post", form);
+        navigate('/')
+      } catch(error) {
+        alert(error)
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      alert("Please enter a prompt and generate an image")
+    }
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
