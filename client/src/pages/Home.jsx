@@ -28,7 +28,7 @@ const Home = () => {
     const fetchPosts = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:5000/api/v1/post');
+        const response = await axios.get('https://ai-image-generation-4n3s.onrender.com/api/v1/post');
         setAllPosts(response.data.data.reverse());
       } catch (error) {
         alert(error)

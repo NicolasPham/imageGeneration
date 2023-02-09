@@ -24,7 +24,7 @@ const CreatePost = () => {
         setGeneratingImg(true);
 
         const response = await axios.post(
-          "http://localhost:5000/api/v1/dalle/",
+          "https://ai-image-generation-4n3s.onrender.com/api/v1/dalle/",
           { prompt: form.prompt }
         );
         const data = response.data;
@@ -44,7 +44,7 @@ const CreatePost = () => {
     if (form.prompt && form.photo) {
       setLoading(true);
       try {
-        const response = await axios.post("http://localhost:5000/api/v1/post", form);
+        const response = await axios.post("https://ai-image-generation-4n3s.onrender.com/api/v1/post", form);
         navigate('/')
       } catch(error) {
         alert(error)
